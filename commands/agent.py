@@ -5,4 +5,3 @@ import click
 def agent_command(prompt):
     """Runs the agent"""
     print("User prompt is ..." + prompt)
- 
