@@ -1,3 +1,8 @@
+
+#! TODO:  Make a permanant Configure folder , usi8ke andar config.json files and everything 
+#! Production Grade method , 
+#! How can it be called as a subcommand of the provider 
+
 import click
 import os
 import json
@@ -9,7 +14,6 @@ from google import genai
 def login_command(provider, api_key):
     # Step1: Validate the input
     SUPPORTED_PROVIDERS = ['claude', 'gemini', 'openai', 'deepseek']
-    #! Step 1 — Validate inputs
     if not provider:
         click.echo("Error:Provider is required")
         return
@@ -23,9 +27,13 @@ def login_command(provider, api_key):
     try:
         client = genai.Client(api_key=api_key)
         models = list(client.models.list())
-        config_api={"api_key":api_key}
-        with open('Config.json','w',encoding='utf-8') as file:
-            json.dump(config_api,file,indent=2)
+
+        with open ('/home/prabhat/Desktop/TUI/config.json','r',encoding='utf-8') as file:
+            config_object=json.load(file)
+        config_object[provider]={"api_key":api_key}
+        # config_api={"api_key":api_key}
+        with open('/home/prabhat/Desktop/TUI/config.json','w',encoding='utf-8') as file:
+            json.dump(config_object,file,indent=2)
         click.echo(f"Logged in with {provider}. Config saved.")
         return True
     except Exception as e:
@@ -43,7 +51,22 @@ if __name__=="__main__":
 
 
 
+'''
 
+# MENTAL MODEL
+
+User gives you API key
+      ↓
+You store it locally (a config file)
+      ↓
+Every future API call reads that file and sends the key in the header
+      ↓
+The provider's server validates it server-side
+      ↓
+Request succeeds or fails based on that
+
+
+'''
 
 
 
@@ -73,15 +96,6 @@ The user types but nothing appears on screen (no characters, no asterisks).
     #! Problem that i m thinking , agar provider doosra hua toh ?? 
     #! Are we going tob use the SDK of all providers in the verification logic ?? 
   
-
-
-
-
-
-
-
-
-
 
 
 
