@@ -1,4 +1,9 @@
 # # # commands/models.py
+
+#! TODO: WRITE THE LOGIC to provide a default model for a given provider and 
+#! Put it inside the config.json 
+
+
 import click
 import json
 @click.command('models')
