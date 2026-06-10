@@ -3,12 +3,9 @@ import click
 import json
 @click.command('models')
 @click.option('-p', '--provider', default='all', help='name of the model')
-#! Keerats boiler plate had .option wala part 
-#! Get clarity on when to use click.option and when not to 
 def models_command(provider):
     # This line handles the part when user throws provider name in
     # small letters like google or anthropic instead of Google / Anthropic
-    provider=provider.capitalize()
     all_model_list=[]
     with open('models.json','r',encoding='utf-8') as file:
         object=json.load(file)
@@ -19,6 +16,7 @@ def models_command(provider):
                 all_model_list.extend(object["providers"][each_provider]['models'])
             click.echo(all_model_list)
         else:
+            provider=provider.capitalize()
             if provider not in providers_list:
                 click.echo(f"Unknown provider :{provider}. Providers list is :{providers_list}")
             else:
