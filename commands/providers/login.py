@@ -8,12 +8,12 @@ import os
 import json
 from google import genai
 @click.command("login")
-@click.option('-p', '--provider', default='', help='Name of the provider (gemini, claude etc)')
-@click.option('-a', '--api_key', default='', help='Your api key')
+@click.option('-p', '--provider', default='Google', help='Name of the provider (gemini, claude etc)')
+@click.option('-a', '--api_key', default='None', help='Your api key')
 
 def login_command(provider, api_key):
     # Step1: Validate the input
-    SUPPORTED_PROVIDERS = ['claude', 'gemini', 'openai', 'deepseek']
+    SUPPORTED_PROVIDERS = ['Google', 'claude', 'gemini', 'openai', 'deepseek']
     if not provider:
         click.echo("Error:Provider is required")
         return
@@ -27,6 +27,7 @@ def login_command(provider, api_key):
     try:
         client = genai.Client(api_key=api_key)
         models = list(client.models.list())
+        print(f"The avaiable models are :{models}")
 
         with open ('/home/prabhat/Desktop/TUI/config.json','r',encoding='utf-8') as file:
             config_object=json.load(file)
