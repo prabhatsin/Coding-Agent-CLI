@@ -1,6 +1,6 @@
 import click
 from commands.models import models_command
-# from commands.agent import agent_command
+from commands.agents_v1 import agent_command
 from commands.providers import set_provider_command,providers_list
 
 @click.group()
@@ -10,7 +10,7 @@ def cli():
     pass
 
 cli.add_command(models_command)
-# cli.add_command(agent_command)
+cli.add_command(agent_command)
 cli.add_command(set_provider_command)
 cli.add_command(providers_list)
 

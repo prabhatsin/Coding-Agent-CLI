@@ -1,5 +1,8 @@
 import click
 import json
+from tools import read_file, write_file, bash
+from tools.schema import all_tools
+
 
 # @click.command("agent")
 # @click.option('-p', '--prompt', default="Explain how AI works in a few words", help='prompt')
@@ -32,11 +35,16 @@ def conversation_logic(prompt,messages):
     if provider=="Google":
         model1=config_json['gemini']["default_model"]
         print('The model used in this loop is',model1)
+
+
         from google import genai
         client = genai.Client(api_key=API_KEY)
         response = client.models.generate_content(
             model=model1,
-            contents=messages
+            contents=messages,
+            config=types.GenerateContentConfig(tools=all_tools)
+
+
         )
         # click.echo(response.text)
         # click.echo(response)
@@ -46,7 +54,7 @@ def conversation_logic(prompt,messages):
         parts=[types.Part(text=response.text)]
     )
 )
-
+ # ? Explore why this didnot worked 
     # messages.append(
     #     {'role':'model',
     #     'parts':response.text}
@@ -63,15 +71,19 @@ def agent_command(prompt):
             break
         response=conversation_logic(prompt,messages)
         # click.echo(messages[-1]['content'])
-        click.echo(response)
-        # Why not response.text ?
-
-
-
-
+        if response.candidates[0].content.parts[0].function_call:
+            pass
+        # handle tool call
+        else:
+            # normal text response, return response.text
+            click.echo(response)
+            # Why not response.text ?
 
 
 if __name__=='__main__':
     agent_command()
-   
-#! TODO : Implement the loop , get the api , and Tool calling part 
+
+
+
+#!TODO : Implement the loop , get the api , and Tool calling part 
+#!TODO :Learn to build a LLM abstractionlayer , a unified chatinterface for all the providers i.e provider agnostic
